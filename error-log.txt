@@ -1,0 +1,17 @@
+2026-03-14T21:08:01.499Z\nTypeError: Cannot set property query of #<IncomingMessage> which has only a getter
+    at D:\internship projects\task-manager-assessment\server\node_modules\xss-clean\lib\index.js:8:30
+    at Layer.handleRequest (D:\internship projects\task-manager-assessment\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\internship projects\task-manager-assessment\server\node_modules\router\index.js:342:13)
+    at D:\internship projects\task-manager-assessment\server\node_modules\router\index.js:297:9
+    at processParams (D:\internship projects\task-manager-assessment\server\node_modules\router\index.js:582:12)
+    at next (D:\internship projects\task-manager-assessment\server\node_modules\router\index.js:291:5)
+    at internalNext (D:\internship projects\task-manager-assessment\server\node_modules\helmet\index.cjs:531:6)
+    at xXssProtectionMiddleware (D:\internship projects\task-manager-assessment\server\node_modules\helmet\index.cjs:311:3)
+    at internalNext (D:\internship projects\task-manager-assessment\server\node_modules\helmet\index.cjs:529:6)
+    at xPoweredByMiddleware (D:\internship projects\task-manager-assessment\server\node_modules\helmet\index.cjs:304:3)\n\n2026-03-14T21:14:45.616Z\nValidationError: Task validation failed: description: Please add a description
+    at model.validate (D:\internship projects\task-manager-assessment\server\node_modules\mongoose\lib\document.js:2864:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.$__save (D:\internship projects\task-manager-assessment\server\node_modules\mongoose\lib\model.js:389:7)
+    at async model.save (D:\internship projects\task-manager-assessment\server\node_modules\mongoose\lib\model.js:663:5)
+    at async Function.create (D:\internship projects\task-manager-assessment\server\node_modules\mongoose\lib\model.js:2750:5)
+    at async exports.createTask (D:\internship projects\task-manager-assessment\server\src\controllers\taskController.js:82:18)\n\n
