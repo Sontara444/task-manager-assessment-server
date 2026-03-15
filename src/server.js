@@ -38,7 +38,7 @@ const sanitizeObject = (obj) => {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       if (typeof obj[key] === 'object' && obj[key] !== null) {
         newObj[key] = sanitizeObject(obj[key]);
-      } else if (typeof obj[key] === 'string' && key !== 'password') {
+      } else if (typeof obj[key] === 'string') {
         newObj[key] = clean(obj[key]);
       } else {
         newObj[key] = obj[key];
