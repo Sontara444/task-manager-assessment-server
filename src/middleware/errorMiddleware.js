@@ -19,9 +19,17 @@ const errorHandler = (err, req, res, next) => {
     error = { message };
   }
 
+  console.error('Error details:', {
+    message: err.message,
+    stack: err.stack,
+    name: err.name,
+    code: err.code
+  });
+
   res.status(error.statusCode || 500).json({
     success: false,
-    error: error.message || 'Server Error'
+    error: error.message || 'Server Error',
+    message: error.message || 'Server Error'
   });
 };
 

@@ -32,7 +32,6 @@ app.use(helmet());
 const sanitizeObject = (obj) => {
   if (!obj || typeof obj !== 'object') return obj;
   
-  // Create a deep copy to sanitize without mutating protected request properties directly
   const newObj = Array.isArray(obj) ? [] : {};
   
   for (let key in obj) {
@@ -50,13 +49,25 @@ const sanitizeObject = (obj) => {
   return newObj;
 };
 
-// Use mongoSanitize as middleware instead of manually
-app.use(mongoSanitize());
-
 app.use((req, res, next) => {
   if (req.body) req.body = sanitizeObject(req.body);
-  if (req.params) req.params = sanitizeObject(req.params);
-  if (req.query) req.query = sanitizeObject(req.query);
+  
+  if (req.query) {
+    for (let key in req.query) {
+      if (typeof req.query[key] === 'string') {
+        req.query[key] = clean(req.query[key]);
+      }
+    }
+  }
+  
+  if (req.params) {
+    for (let key in req.params) {
+      if (typeof req.params[key] === 'string') {
+        req.params[key] = clean(req.params[key]);
+      }
+    }
+  }
+
   next();
 });
 
