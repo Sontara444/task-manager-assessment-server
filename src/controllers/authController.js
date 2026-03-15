@@ -27,11 +27,13 @@ exports.login = async (req, res, next) => {
 
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
+      console.log(`Login failed: User not found for email ${email}`);
       return res.status(401).json({ success: false, error: 'Invalid credentials' });
     }
 
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
+      console.log(`Login failed: Password mismatch for email ${email}`);
       return res.status(401).json({ success: false, error: 'Invalid credentials' });
     }
 
@@ -83,7 +85,14 @@ const sendTokenResponse = (user, statusCode, res) => {
 
 exports.getMe = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
+    let token;
+
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+      token = req.headers.authorization.split(' ')[1];
+    } else if (req.cookies.token) {
+      token = req.cookies.token;
+    }
+
     if (!token || token === 'none') {
       return res.status(200).json({ success: true, data: null });
     }
