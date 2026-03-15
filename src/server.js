@@ -28,21 +28,33 @@ const { clean } = require('xss-clean/lib/xss');
 app.use(helmet());
 
 const sanitizeObject = (obj) => {
-  if (!obj) return;
-  mongoSanitize.sanitize(obj);
+  if (!obj || typeof obj !== 'object') return obj;
+  
+  // Create a deep copy to sanitize without mutating protected request properties directly
+  const newObj = Array.isArray(obj) ? [] : {};
+  
   for (let key in obj) {
-    if (typeof obj[key] === 'object' && obj[key] !== null) {
-      sanitizeObject(obj[key]);
-    } else {
-      obj[key] = clean(obj[key]);
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        newObj[key] = sanitizeObject(obj[key]);
+      } else if (typeof obj[key] === 'string') {
+        newObj[key] = clean(obj[key]);
+      } else {
+        newObj[key] = obj[key];
+      }
     }
   }
+  
+  return newObj;
 };
 
+// Use mongoSanitize as middleware instead of manually
+app.use(mongoSanitize());
+
 app.use((req, res, next) => {
-  if (req.body) sanitizeObject(req.body);
-  if (req.params) sanitizeObject(req.params);
-  if (req.query) sanitizeObject(req.query);
+  if (req.body) req.body = sanitizeObject(req.body);
+  if (req.params) req.params = sanitizeObject(req.params);
+  if (req.query) req.query = sanitizeObject(req.query);
   next();
 });
 
