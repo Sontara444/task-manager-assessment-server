@@ -39,7 +39,11 @@ const sanitizeObject = (obj) => {
       if (typeof obj[key] === 'object' && obj[key] !== null) {
         newObj[key] = sanitizeObject(obj[key]);
       } else if (typeof obj[key] === 'string') {
-        newObj[key] = clean(obj[key]);
+        if (key === 'password' || key === 'currentPassword' || key === 'newPassword') {
+          newObj[key] = obj[key];
+        } else {
+          newObj[key] = clean(obj[key]);
+        }
       } else {
         newObj[key] = obj[key];
       }
